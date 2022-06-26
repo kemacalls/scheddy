@@ -2,8 +2,8 @@
 
 ## description
 
-a tool created to display [couch-to-5k style workout schedules](https://www.c25k.com/c25k_metric.html)
-in a couple of different ways. but i'm sure it could be used for other things as well.
+a tool created to display currnet progress in [couch-to-5k style workout schedules](https://www.c25k.com/c25k_metric.html)
+using a couple of different ways. but i'm sure it could be used for other things as well.
 
 #### how does that work
 
@@ -67,11 +67,20 @@ pip install -r requirements.txt
 simplest usage:
 
 ```
+python scheddy [commands]
+```
+OR  
+```
 chmod +x scheddy
 ./scheddy [commands]
 ```
 
-from there you can add it to anywhere you like your binaries    
+unless you specify a `--config` path, scheddy will create one at   
+`$HOME/.config/scheddy/`  
+and if you don't have a `scheddy.yaml` in your config folder,   
+scheddy will make one for you   
+
+from this point you can add scheddy's binary to anywhere you like your binaries    
 for me it was `~/.local/bin/` with my other python programs  
 
 ```
@@ -100,3 +109,6 @@ in no particular order:
 2. custom theme/formatting options
 3. configure new schedule through commands
 4. add tests
+5. remove need for "start_dow"
+6. infinite schedule mode -> repeat final week indefinitely
+7. print hypothetical schedules (dateless)

@@ -14,7 +14,20 @@ import time
 
 PATH = os.path.expanduser('~') + "/.config/scheddy/"
 FILENAME = "scheddy.yaml"
-DOW = ["mon","tue","wed","thur","fri","sat","sun"]
+DOW = ["mon","tue","wed","thu","fri","sat","sun"]
+YAML_DEFAULT = {
+    'start_date': (datetime.now()).strftime("%m-%d-%Y"),
+    'start_dow': (datetime.now()).strftime("%a").lower(),
+    'week_1': {
+        'dw1': "day one's tasks",
+        'dw2': "day two's tasks",
+        'dw3': "day three's tasks",
+        'dw4': "day four's tasks",
+        'dw5': "day five's tasks",
+        'dw6': "day six's tasks",
+        'dw7': "day seven's tasks"
+    }
+}
 
 def main():
     # args
@@ -29,18 +42,20 @@ def main():
         default=PATH)
     args = par.parse_args()
 
+    # file ops
     if not os.path.exists(args.config):
         try:
             os.mkdir(args.config)
         except:
-            print("[red]couldn't make directory at {}".format(args.config))
+            print("[red]couldn't make or find directory {}\nquitting...".format(args.config))
             quit()
-    
-    if not os.path.exists(args.config + FILENAME):
-        print("[red]couldn't find config file {} at {}".format(FILENAME, args.config))
-        quit()
 
-    with open(args.config + FILENAME) as f:
+    if not os.path.isfile(args.config + FILENAME):
+        with open(args.config + FILENAME,'w') as f:
+            yaml.safe_dump(YAML_DEFAULT,f)
+        print("[red]couldn't find config file {} at {}\ncreating default...".format(FILENAME, args.config))
+
+    with open(args.config + FILENAME,'r') as f:
         contents = yaml.safe_load(f)
 
     # the meat
@@ -50,7 +65,11 @@ def main():
     # display stuff
     week_num = math.ceil(progress_day_num/7) + 1
     day_num = progress_day_num % 7 + 1 
-    todays_entry = entire_schedule[progress_day_num]
+    try:
+        todays_entry = entire_schedule[progress_day_num]
+    except:
+        print("[red]this schedule has expired, nothing to display\nquitting...")
+        quit()
 
     if args.mode == "polym":
         tracker = datetime.now()
