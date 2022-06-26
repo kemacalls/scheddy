@@ -61,7 +61,7 @@ git clone https://github.com/okosuno/scheddy.git
 cd scheddy
 pip install -r requirements.txt
 ```
-## execution
+## usage
 
 simplest usage:
 
@@ -101,6 +101,15 @@ options:
 use `-i` flag with `poly` or `polym` modes.    
 use `-n` flag with `table` mode.     
 
+here is my polybar module:
+```
+[module/scheddy]
+type = custom/script
+exec = /usr/bin/python /home/oko/.local/bin/scheddy -m poly
+label = " %output% "
+label-foreground = ${color.background}
+label-background = ${color.shade2}
+```
 
 ## future plans
 
