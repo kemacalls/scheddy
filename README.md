@@ -48,7 +48,7 @@ sunday, june 26: day 1 of week 1
 today's workout: 5W, 1J/1.5W -> 20min
 ```
 
-or this table:  
+or this table (depends on your terminals color scheme):  
 
 ![image](https://i.imgur.com/aGh2ARK.png)
 
