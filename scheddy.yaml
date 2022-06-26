@@ -1,0 +1,10 @@
+start_date: "06-26-2022"
+start_dow: "sun"
+week_1:
+    dw1: "day one's tasks"
+    dw2: "day two's tasks"
+    dw3: "day three's tasks"
+    dw4: "day four's tasks"
+    dw5: "day five's tasks"
+    dw6: "day six's tasks"
+    dw7: "day seven's tasks"

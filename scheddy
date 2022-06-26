@@ -1,0 +1,177 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+from rich import print
+from rich.table import Table
+from rich.padding import Padding
+from rich.style import Style
+from rich import box
+from datetime import datetime, timedelta
+import yaml
+import os
+import argparse
+import math
+import time
+
+PATH = os.path.expanduser('~') + "/.config/scheddy/"
+FILENAME = "scheddy.yaml"
+DOW = ["mon","tue","wed","thur","fri","sat","sun"]
+
+def main():
+    # args
+    par = argparse.ArgumentParser()
+    par.add_argument("-m","--mode", help="choose output style",\
+        choices=["poly","polym","table"])
+    par.add_argument("-i","--interval", type=int, default=10,\
+        help="time in seconds between lines in polym mode (default:10)")
+    par.add_argument("-n","--no-date", action='store_true', default=False,\
+        help="do not show date in tables")
+    par.add_argument("-c",'--config', help="specify alternative path for config", \
+        default=PATH)
+    args = par.parse_args()
+
+    if not os.path.exists(args.config):
+        try:
+            os.mkdir(args.config)
+        except:
+            print("[red]couldn't make directory at {}".format(args.config))
+            quit()
+    
+    if not os.path.exists(args.config + FILENAME):
+        print("[red]couldn't find config file {} at {}".format(FILENAME, args.config))
+        quit()
+
+    with open(args.config + FILENAME) as f:
+        contents = yaml.safe_load(f)
+
+    # the meat
+    all_days, todays_date, progress_day_num, dow = time_setup(contents)
+    entire_schedule = build_schedule(contents, all_days)
+
+    # display stuff
+    week_num = math.ceil(progress_day_num/7) + 1
+    day_num = progress_day_num % 7 + 1 
+    todays_entry = entire_schedule[progress_day_num]
+
+    if args.mode == "polym":
+        tracker = datetime.now()
+        while True:
+            print_day_info = todays_entry[0].strftime('%A, %B %-d')
+            while True:
+                print("[green][bold]{}: day {} of week {}".format(print_day_info, day_num, week_num).lower())
+                time.sleep(args.interval)
+                print('[green][bold]today\'s workout: {}'.format(todays_entry[1]))
+                time.sleep(args.interval)
+                if datetime.now() >= tracker + timedelta(hours=1):
+                    tracker = datetime.now()
+                    break
+
+            # refresh program
+            all_days, todays_date, progress_day_num, dow = time_setup(contents)
+            entire_schedule = build_schedule(contents, all_days)
+            week_num = math.ceil(progress_day_num/7) + 1
+            day_num = progress_day_num % 7 + 1 
+            todays_entry = entire_schedule[progress_day_num]  
+
+    if args.mode == "poly":
+        tracker = datetime.now()
+        while True:
+            print_day_info = todays_entry[0].strftime('%A')
+            print('[green][bold]{}\'s workout: {}'.format(print_day_info, todays_entry[1]).lower())
+            time.sleep(6000)
+
+            # refresh program
+            all_days, todays_date, progress_day_num, dow = time_setup(contents)
+            entire_schedule = build_schedule(contents, all_days)
+            week_num = math.ceil(progress_day_num/7) + 1
+            day_num = progress_day_num % 7 + 1 
+            todays_entry = entire_schedule[progress_day_num]
+
+    if args.mode == "table":
+        # setup alt row style
+        bg = Style(bgcolor="#000000")
+
+        # make table object
+        table = Table(expand=True, show_lines=False, row_styles=[bg, ""], box=box.SIMPLE)
+        table. add_column("week #", justify='center',vertical='middle', overflow='crop')
+        for i in dow:
+            table.add_column(i, justify='center', vertical='middle', ratio=1, overflow='fold')
+
+        # get cell values together
+        row_list = list()
+        row_list_list = list()
+        for c, v in enumerate(entire_schedule):
+            
+            # these strings formatted for table rows
+            if not args.no_date:
+                string = "[green]{} \n\n[bold]{}[/bold][/green]".format(v[0].strftime('%b %d %y'),v[1])
+                if v[0].date() == todays_date.date():
+                    string = "[bold][yellow]{} \n\n {}[/bold][/yellow]".format(v[0].strftime('%b %d %y'),v[1])
+                string = Padding(string,(2,2,2,2))
+            else:
+                string = "[green][bold]{}[/bold][/green]".format(v[1])
+                if v[0].date() == todays_date.date():
+                    string = "[bold][yellow]{}[/bold][/yellow]".format(v[1])
+                string = Padding(string,(2,2,2,2))
+
+            c += 1
+            # this places table entries
+            if c % 7 != 0:
+                row_list.append(string)
+            else:
+                row_list.append(string)
+                row_list_list.append(row_list)
+                row_list = list()
+        rll = row_list_list # readability
+        
+        # finally make rows
+        for c, _ in enumerate(row_list_list):
+            table.add_row(str(c+1),\
+                          rll[c][0],rll[c][1],\
+                          rll[c][2],rll[c][3],\
+                          rll[c][4],rll[c][5],\
+                          rll[c][6],)
+        print(table)
+
+def time_setup(contents):
+    # date setup
+    todays_date = datetime.now()
+    date_string = contents['start_date']
+    start_date = datetime.strptime(date_string, '%m-%d-%Y')
+    progress_day_num = (todays_date - start_date).days
+
+    # day of week order setup, formatting for later
+    start_dow = contents['start_dow']
+    dow_pos = DOW.index(start_dow)
+    dow_num = list()
+
+    for _ in range(0,7):
+        if dow_pos >= 7: 
+            dow_pos = 0
+        dow_num.append(dow_pos)
+        dow_pos += 1
+        
+    dow = [DOW[i] for i in dow_num]
+ 
+    # list of all days for the schedule tuple
+    all_days = list()
+    working_day = start_date
+    for i in contents.values():
+        if not isinstance(i,str):
+            for _ in i:
+                all_days.append(working_day)
+                working_day = working_day + timedelta(days = 1) 
+
+    return all_days, todays_date, progress_day_num, dow
+
+def build_schedule(contents, all_days):
+    entire_schedule = list()
+    for i in contents:    
+        if str(i[0]) == "w":
+            temp_list = [ contents[str(i)][v] for v in contents[str(i)] ]
+            [ entire_schedule.append(i) for i in temp_list ]    
+    entire_schedule = list(zip(all_days,entire_schedule))
+
+    return entire_schedule
+
+if __name__ == "__main__":
+    main()
