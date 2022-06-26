@@ -68,19 +68,21 @@ simplest usage:
 ```
 python scheddy [commands]
 ```
-OR  
+or  
 ```
 chmod +x scheddy
 ./scheddy [commands]
 ```
 
-unless you specify a `--config` path, scheddy will create one at   
+unless you specify a `--config` path, scheddy will create one at:   
 `$HOME/.config/scheddy/`  
 and if you don't have a `scheddy.yaml` in your config folder,   
-scheddy will make one for you   
+scheddy will make one for you.   
 
-from this point you can add scheddy's binary to anywhere you like your binaries    
-for me it was `~/.local/bin/` with my other python programs  
+now you can add scheddy's binary to anywhere you like your binaries.    
+for me it was `~/.local/bin/` with my other python programs.    
+
+help:  
 
 ```
 usage: scheddy [-h] [-m {poly,polym,table}] [-i INTERVAL] [-n] [-c CONFIG]
@@ -96,8 +98,8 @@ options:
                         specify alternative path for config
 ```
 
-use `-i` flag with `poly` or `polym` modes    
-use `-n` flag with `table` mode     
+use `-i` flag with `poly` or `polym` modes.    
+use `-n` flag with `table` mode.     
 
 
 ## future plans
@@ -107,7 +109,7 @@ in no particular order:
 1. more scrolling output options (tomorrow's workout, days elapsed)
 2. custom theme/formatting options
 3. configure new schedule through commands
-4. add tests
+4. __add tests__
 5. remove need for "start_dow"
-6. infinite schedule mode -> repeat final week indefinitely
+6. __infinite schedule mode -> repeat final week indefinitely__
 7. print hypothetical schedules (dateless)
