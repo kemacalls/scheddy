@@ -2,11 +2,11 @@
 
 ## description
 
-a tool created to display currnet progress in [couch-to-5k style workout schedules](https://www.c25k.com/c25k_metric.html) either by printing to terminal or using [polybar](https://github.com/polybar/polybar).
+a tool created to display current progress in [couch-to-5k style workout schedules](https://www.c25k.com/c25k_metric.html) either by printing to terminal or using [polybar](https://github.com/polybar/polybar).
 
 #### how does that work
 
-first, you transcribe your schedule in an easy yaml format.  
+first, you transcribe your schedule into an easy yaml format.  
 then, you can use scheddy for:
   1. updates in polybar about what today's workout looks like
   2. a pretty table printed to terminal detailing your schedule
