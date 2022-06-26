@@ -2,7 +2,7 @@
 
 ## description
 
-a tool created to display currnet progress in [couch-to-5k style workout schedules](https://www.c25k.com/c25k_metric.html)
+a tool created to display currnet progress in [couch-to-5k style workout schedules](https://www.c25k.com/c25k_metric.html)  
 using a couple of different ways. but i'm sure it could be used for other things as well.
 
 #### how does that work
