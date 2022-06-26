@@ -106,6 +106,7 @@ here is my polybar module:
 [module/scheddy]
 type = custom/script
 exec = /usr/bin/python /home/oko/.local/bin/scheddy -m poly
+tail = true
 label = " %output% "
 label-foreground = ${color.background}
 label-background = ${color.shade2}
