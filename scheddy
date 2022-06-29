@@ -40,7 +40,7 @@ def main():
         help="do not show date in tables")
     par.add_argument("-c",'--config', help="specify alternative path for config", \
         default=PATH)
-    par.add_argument("-s",'--string', help="customize the string for polybar, takes strftime (e.g. '%A')", default="%A's activity: ")
+    par.add_argument("-s",'--string', help="customize the string for polybar, takes strftime for dates", default="%A's activity: ")
     par.add_argument("-l",'--lower', action='store_true', help="forces given string to be all lowercase")
     args = par.parse_args()
 
