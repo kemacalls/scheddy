@@ -83,9 +83,8 @@ now you can add scheddy's binary to anywhere you like your binaries.
 for me it was `~/.local/bin/` with my other python programs.    
 
 help:  
-
 ```
-usage: scheddy [-h] [-m {poly,polym,table}] [-i INTERVAL] [-n] [-c CONFIG]
+usage: scheddy [-h] [-m {poly,polym,table}] [-i INTERVAL] [-n] [-c CONFIG] [-s STRING] [-l]
 
 options:
   -h, --help            show this help message and exit
@@ -96,10 +95,15 @@ options:
   -n, --no-date         do not show date in tables
   -c CONFIG, --config CONFIG
                         specify alternative path for config
+  -s STRING, --string STRING
+                        customize the string for polybar, takes strftime for dates
+  -l, --lower           forces given string to be all lowercase
 ```
 
-use `-i` flag with `poly` or `polym` modes.    
+use `-i, -s, -l` flags with `poly` or `polym` modes.    
 use `-n` flag with `table` mode.     
+
+e.g. `scheddy -m poly -s '%A's workout: ` -l`
 
 here is my polybar module:
 ```
