@@ -40,6 +40,8 @@ def main():
         help="do not show date in tables")
     par.add_argument("-c",'--config', help="specify alternative path for config", \
         default=PATH)
+    par.add_argument("-s",'--string', help="customize the string for polybar, takes strftime (e.g. '%A')", default="%A's activity: ")
+    par.add_argument("-l",'--lower', action='store_true', help="forces given string to be all lowercase")
     args = par.parse_args()
 
     # file ops
@@ -78,7 +80,7 @@ def main():
             while True:
                 print("[green][bold]{}: day {} of week {}".format(print_day_info, day_num, week_num).lower())
                 time.sleep(args.interval)
-                print('[green][bold]today\'s workout: {}'.format(todays_entry[1]))
+                print('[green][bold]{}{}'.format(args.string,todays_entry[1]))
                 time.sleep(args.interval)
                 if datetime.now() >= tracker + timedelta(hours=1):
                     tracker = datetime.now()
@@ -94,8 +96,12 @@ def main():
     if args.mode == "poly":
         tracker = datetime.now()
         while True:
-            print_day_info = todays_entry[0].strftime('%A')
-            print('[green][bold]{}\'s workout: {}'.format(print_day_info, todays_entry[1]).lower())
+            string_with_date_parse = todays_entry[0].strftime(args.string)
+            printed_string = f"[green][bold]{string_with_date_parse}{todays_entry[1]}"
+            if args.lower: 
+                print(printed_string.lower())
+            else:
+                print(printed_string)
             time.sleep(6000)
 
             # refresh program
