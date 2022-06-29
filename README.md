@@ -103,7 +103,7 @@ options:
 use `-i, -s, -l` flags with `poly` or `polym` modes.    
 use `-n` flag with `table` mode.     
 
-e.g. `scheddy -m poly -s '%A's workout: ` -l`
+e.g. `scheddy -m poly -s '%A's workout:' -l`
 
 here is my polybar module:
 ```
